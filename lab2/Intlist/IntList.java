@@ -81,18 +81,44 @@ public class IntList {
      */
 
     public static IntList dcatenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        if (A == null) {
+            return B;
+        }
+        IntList temp = A;
+        while (temp.rest != null) {
+            temp = temp.rest;
+        }
+        temp.rest = B;
+        return A;
     }
+
 
     /**
      * Returns a list consisting of the elements of A followed by the
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        if (A == null) {
+            return B;
+        }
+
+        // 创建新链表，并复制A的第一个元素
+        IntList newList = new IntList(A.first, null);
+        IntList pointer = newList;
+
+        // 遍历A，将A的每个元素添加到新链表
+        while (A.rest != null) {
+            A = A.rest;
+            pointer.rest = new IntList(A.first, null);
+            pointer = pointer.rest;
+        }
+
+        // 将B的元素添加到新链表
+        pointer.rest = B;
+
+        return newList;
     }
+
 
 
 
