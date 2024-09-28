@@ -52,7 +52,7 @@ public class LinkedListDeque<T> {
 
     /** 创建深拷贝 */
     public LinkedListDeque(LinkedListDeque<T> other) {
-        this();
+        this();// 调用默认构造函数创建空链表
         Node temp = other.sentinel.next;
         while (temp != other.sentinel) {
             this.addLast(temp.item);
@@ -78,7 +78,7 @@ public class LinkedListDeque<T> {
         sentinel.prev = newNode; // 循环链表
         last = newNode;
         if (size == 0) {
-            sentinel.next = newNode;
+            sentinel.next = newNode; // 如果链表为空，哨兵节点的next也指向新节点
         }
         size += 1;
     }
@@ -98,9 +98,9 @@ public class LinkedListDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        Node first = sentinel.next;
-        sentinel.next = first.next;
-        first.next.prev = sentinel;
+        Node first = sentinel.next;// 获取第一个节点
+        sentinel.next = first.next;// 哨兵节点指向下一个节点
+        first.next.prev = sentinel;// 更新第二个节点的prev指针
         size -= 1;
         return first.item;
     }
@@ -110,10 +110,10 @@ public class LinkedListDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        Node lastNode = last; //lastNode始终指向last
-        last = last.prev;
-        last.next = sentinel;
-        sentinel.prev = last;
+        Node lastNode = last; //保存最后一个节点
+        last = last.prev;// 更新last指向前一个节点
+        last.next = sentinel;// 最后一个节点的next指向哨兵节点
+        sentinel.prev = last;// 哨兵节点的prev指向更新后的last
         size-=1;
         return lastNode.item;
     }
