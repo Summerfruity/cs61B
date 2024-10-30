@@ -1,115 +1,144 @@
+
 public class LinkedListDeque<T> {
+
     /** inner class Node. */
-    public class Node {
-        /** the item stored on this node. */
+    public class Node{
         private T item;
-        /** the Node before this Node. **/
-        private Node pre;
-        /** the Node after this Node. **/
+        private Node prev;
         private Node next;
 
         /** constructor for Node. */
-        public Node(T n, Node ppre, Node nnext) {
-            item = n;
-            pre = ppre;
-            next = nnext;
+        public Node(T x, Node p, Node n){
+            item = x;
+            prev = p;
+            next = n;
         }
 
         /** constructor for Node.(especially for sentinel node). */
-        public Node(Node ppre, Node nnext) {
-            pre = ppre;
-            next = nnext;
+        public Node(Node p, Node n){
+            prev = p;
+            next = n;
         }
     }
-
-    /** sentinel node. */
+    /** the first item(if it exists) is at sentinel.next */
     private Node sentinel;
-    /** size of the deque. */
+
+    /** Maintain a size variable that caches the size of the list */
     private int size;
 
-    /** constructor for deque. */
-    public LinkedListDeque() {
-        sentinel = new Node(null, null);
-        sentinel.pre = sentinel;
-        sentinel.next = sentinel;
+    /** The Last pointer always point to the last node */
+    private Node last;
+
+    /** Creates an empty list */
+    public LinkedListDeque(){
         size = 0;
+        sentinel = new Node(null, null, null);
+        sentinel.prev = sentinel;
+        sentinel.next = sentinel;
+        last = sentinel;
     }
 
-    public boolean isEmpty() {
+    /** Adds x to the front of the list*/
+    public void addFirst(T item){
+        Node newNode = new Node(item, sentinel, sentinel.next);
+        sentinel.next.prev = newNode;
+        sentinel.next = newNode;
+        if (size == 0){
+            last = newNode;
+        }
+        size += 1;
+    }
+
+    /** Adds x to the end of the  list*/
+    public void addLast(T item){
+        Node newNode = new Node(item, last, sentinel);
+        last.next = newNode;
+        sentinel.prev = newNode;
+        last = newNode;
+        size +=1;
+    }
+
+    /** Returns true if deque is empty, false otherwise */
+    public boolean isEmpty(){
         return size == 0;
     }
 
-    public int size() {
+    /** Returns the number of items in the deque */
+    public int size(){
         return size;
     }
 
-    public void addFirst(T item) {
-        Node newList = new Node(item, sentinel, sentinel.next);
-        sentinel.next.pre = newList;
-        sentinel.next = newList;
-        size++;
+    /** Prints the items in the deque from first to last, separated by a space.
+     * Once all the items have been printed, print out a new line.
+     */
+    public void printDeque(){
+        Node tmp = sentinel.next;
+        while(tmp.next != sentinel){
+            System.out.println(tmp.item + " ");
+            tmp = tmp.next;
+        }
+        System.out.println(" ");
     }
 
-    public void addLast(T item) {
-        Node newList = new Node(item, sentinel.pre, sentinel);
-        sentinel.pre.next = newList;
-        sentinel.pre = newList;
-        size++;
-    }
-
-    public T removeFirst() {
-        if (size == 0) {
+    /** Removes and returns the item at the front of the deque. If no such item exists, returns null.*/
+    public T removeFirst(){
+        if (isEmpty()){
             return null;
         }
-        T ret = sentinel.next.item;
-        sentinel.next.next.pre = sentinel;
-        sentinel.next = sentinel.next.next;
-        size--;
-        return ret;
+
+        Node first = sentinel.next; //Get the first node
+        sentinel.next = first.next;
+        first.next.prev = sentinel;
+        size -= 1;
+        return first.item;
     }
 
-    public T removeLast() {
-        if (size == 0) {
+    /** Removes and returns the item at the back of the deque. If no such item exists, returns null.*/
+    public T removeLast(){
+        if (isEmpty()){
             return null;
         }
-        T ret = sentinel.pre.item;
-        sentinel.pre.pre.next = sentinel;
-        sentinel.pre = sentinel.pre.pre;
-        size--;
-        return ret;
+        T item = last.item;
+        last = last.prev;
+        last.next = sentinel;
+        sentinel.prev = last;
+        size -= 1;
+        return item;
     }
 
-    public T get(int index) {
-        if (index >= size) {
+    /** Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
+     * If no such item exists, returns null. Must not alter the deque!
+     */
+    public T get(int index){
+        if (index < 0 || index >= size) {
             return null;
         }
-        Node ptr = sentinel;
-        for (int i = 0; i <= index; i++) {
-            ptr = ptr.next;
+        Node p = sentinel.next;
+        for (int cnt = 0; cnt < index; cnt++) {
+            p = p.next;
         }
-        return ptr.item;
+        return p.item;
     }
 
-    private T getRecursiveHelp(Node start, int index) {
+    /** Same as get, but uses recursion.*/
+    public T getRecursive(int index){
+        return getRecursiveHelper(sentinel.next, index);
+    }
+
+    private T getRecursiveHelper(Node node, int index) {
         if (index == 0) {
-            return start.item;
-        } else {
-            return getRecursiveHelp(start.next, index - 1);
+            return node.item;
         }
+        return getRecursiveHelper(node.next, index - 1);
     }
 
-    public T getRecursive(int index) {
-        if (index >= size) {
-            return null;
-        }
-        return getRecursiveHelp(sentinel.next, index);
-    }
-
-    public void printDeque() {
-        Node ptr = sentinel.next;
-        while (ptr != sentinel) {
-            System.out.print(ptr.item + " ");
-            ptr = ptr.next;
+    /** Creates a deep copy of other */
+    public LinkedListDeque(LinkedListDeque other){
+        this();
+        Node p = other.sentinel.next;
+        while(p != sentinel){
+            this.addLast(p.item);
+            p = p.next;
         }
     }
 }
