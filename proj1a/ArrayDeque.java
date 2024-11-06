@@ -1,4 +1,8 @@
-public class ArrayDeque<T> {
+/** second part of project1A.
+ * deque implemented by array
+ * @author FlyingPig
+ */
+public class ArrayDeque<T> implements List61B<T>{
 
     /** array to save data.*/
     private T[] array;
@@ -31,6 +35,7 @@ public class ArrayDeque<T> {
     }
 
     /** return the size of the deque. */
+    @Override
     public int size() {
         return size;
     }
@@ -89,6 +94,7 @@ public class ArrayDeque<T> {
     /** add one item at the front of the deque.
      * @param item the item we want to add
      */
+    @Override
     public void addFirst(T item) {
         if (size == length - 1) {
             grow();
@@ -101,6 +107,7 @@ public class ArrayDeque<T> {
     /** add one item at the end of the deque.
      * @param item item we want to add
      */
+    @Override
     public void addLast(T item) {
         if (size == length - 1) {
             grow();
@@ -144,6 +151,7 @@ public class ArrayDeque<T> {
     /** return the item indexed at index.
      * @param index index
      */
+    @Override
     public T get(int index) {
         if (index >= size) {
             return null;

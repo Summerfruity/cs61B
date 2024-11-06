@@ -1,8 +1,4 @@
-/**  first part of project1A.
- *   Deque implemented by Linked List
- *  @author FlyingPig
- */
-public class LinkedListDeque<T> implements List61B<T>{
+public class LinkedListDeque<T> implements Deque<T>{
     /** inner class Node. */
     public class Node {
         /** the item stored on this node. */
@@ -39,6 +35,7 @@ public class LinkedListDeque<T> implements List61B<T>{
         size = 0;
     }
 
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
@@ -64,6 +61,7 @@ public class LinkedListDeque<T> implements List61B<T>{
         size++;
     }
 
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -114,6 +112,7 @@ public class LinkedListDeque<T> implements List61B<T>{
         return getRecursiveHelp(sentinel.next, index);
     }
 
+    @Override
     public void printDeque() {
         Node ptr = sentinel.next;
         while (ptr != sentinel) {
@@ -121,10 +120,5 @@ public class LinkedListDeque<T> implements List61B<T>{
             ptr = ptr.next;
         }
     }
-    @Override
-    public void print(){
-        for (Node p = sentinel.next; p.next != null; p = p.next){
-            System.out.print(p.item + " ");
-        }
-    }
+
 }
